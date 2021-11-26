@@ -18,10 +18,6 @@ L = [] # store bit shift from L1, L2
 Seq = [] # store mux from L and m
 # Generating key 
 for _ in range(len(m)):
-    #print("L1")
-    #print(L1.count,L1.state,'',L1.outbit,L1.seq,sep='\t')
-    #print("L2")
-    #print(L2.count,L2.state,'',L2.outbit,L2.seq,sep='\t')
     L1.next()
     L2.next()
     L.append(xor(L1.outbit,L2.outbit))

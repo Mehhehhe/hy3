@@ -137,4 +137,4 @@ print("\n\n")
 #   8. Number of wall
 #   9. Number of floor
 print(FindDistance(-66.2316,20,5,2.4,"Indoor building","Plaster board_alter","Foundation wall",1,0))
-print(FindDistanceWithoutOB(-82,23))
+print(FindDistanceIndoor5G(-82,23))

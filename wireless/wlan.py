@@ -1,4 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
+
+
 #   @Author Pakin aka Mehhhehhe
 
 #--------------------------------------------------------
@@ -68,9 +71,31 @@ def FindDistanceIndoor5G(receivePower, transmitPower, wallMat, floorMat, wallnum
             return (
                 10**((transmitPower-receivePower-41-(WAF2400.get(wallMat)*wallnum)-(WAF2400.get(floorMat)*floornum))/31)
             )
+
+def plotMaximumRoomDistGraph(transmitPower, maxDistFromOB, frequency, initSpace, lossExpo, wallMat, floorMat,wallNum, floorNum):
+    distanceFromOB = np.arange(0.01,maxDistFromOB,0.01)
+    Lp = indoor_propagation(frequency,distanceFromOB,initSpace,path_loss_expo.get(lossExpo),wallMat,floorMat,wallNum,floorNum)
+    Pr = powerRTL_NOGain(None,transmitPower,Lp)
+    plt.plot(Pr,distanceFromOB,'.')
+    plt.title("Maximum distance")
+    dec_x = format(Pr[len(Pr)-1], ".4f")
+    dec_y = format(distanceFromOB[len(distanceFromOB)-1], ".4f")
+    plt.annotate('('+str(dec_x)+','+str(dec_y)+')', xy=(Pr[len(Pr)-1], distanceFromOB[len(distanceFromOB)-1]))
+    plt.show()
+    
+def plotUsableRangeGraph(transmitPower, initSpace, frequency, lossExpo, wallMat, floorMat, wallnum, floornum):
+    powerR = np.arange(-30,-91,-1)
+    arrayDist = FindDistance(powerR,transmitPower,initSpace,frequency,lossExpo,wallMat,floorMat,wallnum,floornum)
+    plt.plot(arrayDist,powerR,'.')
+    plt.title("Distance of Usable Range")
+    dec_y = format(powerR[len(powerR)-1], ".4f")
+    dec_x = format(arrayDist[len(arrayDist)-1], ".4f")
+    plt.annotate('('+str(dec_x)+','+str(dec_y)+')', xy=(arrayDist[len(arrayDist)-1],powerR[len(powerR)-1]))
+    plt.show()
 #--------------------------------------------------------
 # Dictionary
 WAF2400 = {
+    #   CWNA Page 123 For 2.4G
     "Foundation wall":15,
     "Brick":12,
     "Concrete":12,
@@ -83,7 +108,8 @@ WAF2400 = {
     "Glass":3,
     "Wood door":3,
     "Cubicle wall":2,
-    "Plaster board_alter":6
+    # 
+    "Plaster board_alter":6 # was tagged as alter (due to exercise)
 }
 
 path_loss_expo = {
@@ -105,7 +131,6 @@ def isMoreThan(currentSensitivity, Spec):
     else:
         return "Too far! Bad quality"
 #-------------------------------------------------------
-
 #   Find power of receiver (signal strength)
 #   Parameter : 
 #   1. Frequency -> (2.4/5) GHz (Currently only test on 2.4G)
@@ -139,3 +164,7 @@ print("\n\n")
 print(FindDistance(-66.2316,20,5,2.4,"Indoor building","Plaster board_alter","Foundation wall",1,0))
 print(FindDistanceIndoor5G(-82,23,None,None,None,None))
 print(FindDistanceIndoor5G(-82,23,"Plaster board_alter","Foundation wall",1,0))
+#
+#   Plot Graph
+plotMaximumRoomDistGraph(20,35,2.4,5,"Indoor building",6,0,1,0)
+plotUsableRangeGraph(20,5,2.4,"Indoor building","Plaster board_alter","Foundation wall", 1, 0)

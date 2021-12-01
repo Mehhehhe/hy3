@@ -53,7 +53,21 @@ def FindDistance(receivePower, transmitPower, initSpace, frequency, lossExpo, wa
         return (
             np.float_power((initSpace**path_loss_expo.get(lossExpo))*(10**((transmitPower-receivePower-BETA(frequency,initSpace)-(WAF2400.get(wallMat)*wallnum)-(WAF2400.get(floorMat)*floornum))/10)),1/path_loss_expo.get(lossExpo))
         )
-    
+
+def FindDistanceIndoor5G(receivePower, transmitPower, wallMat, floorMat, wallnum, floornum): # For 5G
+    if wallMat is None and floorMat is None and wallnum is None and floornum is None:
+        return (
+            10**((transmitPower-receivePower-41)/31)
+        )
+    else:
+        if type(wallMat) == int or type(floorMat) == int:
+            return (
+                10**((transmitPower-receivePower-41-(wallMat*wallnum)-(floorMat*floornum))/31)
+            )
+        else:
+            return (
+                10**((transmitPower-receivePower-41-(WAF2400.get(wallMat)*wallnum)-(WAF2400.get(floorMat)*floornum))/31)
+            )
 #--------------------------------------------------------
 # Dictionary
 WAF2400 = {
@@ -116,10 +130,11 @@ print("\n\n")
 #   1. Receiver's power / signal strength
 #   2. Transmitter power
 #   3. Initial distance to obstacle (wall/floor)
-#   4. Frequency -> (2.4/5) GHz
+#   4. Frequency -> Support only 2.4G
 #   5. Path Loss Exponent
 #   6. Wall material
 #   7. Floor Material
 #   8. Number of wall
 #   9. Number of floor
 print(FindDistance(-66.2316,20,5,2.4,"Indoor building","Plaster board_alter","Foundation wall",1,0))
+print(FindDistanceWithoutOB(-82,23))

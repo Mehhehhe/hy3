@@ -12,18 +12,24 @@ value_wheel = {index:value for index, value in enumerate(alphabet_wheel)}
 def caesar_cipher(msg,shift_num=3,mode="encryption"):
     en = []
     de = []
+    result = ""
     if mode == "encryption":
-        print("Encrypting ", msg, " with shift : ", shift_num)
+        # print("Encrypting ", msg, " with shift : ", shift_num)
         for i in msg:
             en.append(value_wheel.get((alphabet_wheel.get(i)+shift_num)%26))
-        return en
+        for i in en:
+            result += str(i)
+        return result
     elif mode == "decryption":
-        print("Decrypting ", msg, " with shift : ", shift_num)
+        # print("Decrypting ", msg, " with shift : ", shift_num)
         for i in msg:
             de.append(value_wheel.get((alphabet_wheel.get(i)-shift_num)%26))
-        return de
+        for i in de:
+            result += str(i)
+        return result
 
-msg = "Hello"
+msg = "SONWXAJSVODISNA"
 letters_of_msg = list(msg.upper())
 # print(letters_of_msg)
-print(caesar_cipher(letters_of_msg,4,"decryption"))
+for i in range(0,26):
+    print("Decryption with shifting number :",i," ,",caesar_cipher(letters_of_msg,i,"decryption"))

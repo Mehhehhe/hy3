@@ -3,7 +3,6 @@ def format_dictionary(value_dict,more_indent="default"):
     payload += "{\n" if(more_indent == "default") else " {\n" # Add '{' to blank string [option: default], Add '{' with space to blank string [option: any]
     
     for i in value_dict:    #   Looping thorugh keys in dictionary
-        
         if (type(i) is str):    # Check if current key is string or not.
             
             if (type(value_dict.get(i)) is not dict):   # Check if value at current key is dictionary or not.
@@ -21,9 +20,11 @@ def format_dictionary(value_dict,more_indent="default"):
         else:   #   Current key is not string
             if (type(value_dict.get(i)) is not dict):
                 if (type(value_dict.get(i)) is str):
-                    payload += '\t\"'+i+'\"'+": \""+str(value_dict.get(i))+"\",\n" if (more_indent == "default") else '\t\t\"'+i+'\"'+": \""+str(value_dict.get(i))+"\",\n" 
+                    #print(payload)
+                    payload += '\t\"'+str(i)+'\"'+": \""+str(value_dict.get(i))+"\",\n" if (more_indent == "default") else '\t\t\"'+str(i)+'\"'+": \""+str(value_dict.get(i))+"\",\n" 
                 else:
-                    payload += '\t\"'+i+'\"'+": "+value_dict.get(i)+",\n" if (more_indent == "default") else '\t\t\"'+i+'\"'+": "+value_dict.get(i)+",\n"
+                    #print(payload)
+                    payload += '\t\"'+str(i)+'\"'+": "+value_dict.get(str(i))+",\n" if (more_indent == "default") else '\t\t\"'+str(i)+'\"'+": "+value_dict.get(str(i))+",\n"
             else:
                 payload += '\t\"'+i+'\"'+": "+format_dictionary(value_dict.get(i),"yes")
     

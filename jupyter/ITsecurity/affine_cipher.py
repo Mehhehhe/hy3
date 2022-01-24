@@ -40,8 +40,8 @@ def affine_cipher(msg, key_a, key_b, mode="encryption"):
 original_message = "SONWXAJSVODISNA"
 msg_letters = list(original_message)
 # print(msg_letters)
-for a in range(0,25):
-    for b in range(0,25): 
+for a in range(0,26):
+    for b in range(0,26): 
         try:
             print("Alpha : ",a,", Beta : ",b,", Decryption Result : ",affine_cipher(msg_letters, a, b, "decryption"))
         except Exception:

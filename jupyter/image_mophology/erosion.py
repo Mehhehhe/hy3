@@ -33,22 +33,46 @@ window2 = [
 #     print(i, end='\n')
 
 def erosion(window, sample):
-    flag = 0
+    # Setup
+    flag = 0;z_flag=0
     result = [[0]*20]
-    temp = [];column_count = 0;row_count = 0
+    temp = [];column_count = 0;row_count = 0;total_one=0;total_zero=0
+
+    for i in window:
+        for j in i:
+            if j==1: total_one+=1
+            else:total_zero+=1
+
+    # Process: until row is equal to actual length of nested list
     while row_count <= len(sample):
-        if column_count == (len(sample[0])-1):
+        # Check if moving window aka structure element is hit the corner (last column) 
+        if column_count == (len(sample[0])):
+            # Append zero to complete a list (3x3 corner is 0), reset column counter 
+            # and move window to next row
             temp.append(0);row_count += 1;column_count = 0
+            # Copy from temp and append into result then clear all values in temp.
             result.append(temp.copy());temp.clear()
+            # If hit the last row, append all zeroes and break a while
+            # or continue the loop
             if row_count == len(sample)-2: result.append([0]*20);break
             else:continue
-        for i in range(len(window)):
-            for j in range(len(window[i])):
-                if window[i][j] == 1 and (j+column_count <= len(sample[0])-1) and (i+row_count <= len(sample)-1):
-                    if sample[i+row_count][j+column_count] == window[i][j]: flag += 1
-                    if i == len(window)-1 and flag == 4:flag = 0;temp.append(1);break
-                    elif i == len(window)-1 and flag != 4:flag = 0;temp.append(0);break
-        column_count += 1
+        
+        # Member appending process
+        sliced_list = [
+            sample[row_count][column_count:column_count+len(window)],
+            sample[row_count+1][column_count:column_count+len(window)],
+            sample[row_count+2][column_count:column_count+len(window)],
+        ]
+
+        for row_index, row_value in enumerate(sliced_list):
+            for col_index, col_value in enumerate(row_value):
+                if window[row_index][col_index] == col_value and col_value == 1:
+                    flag += 1
+                    if flag == total_one:temp.append(1);flag=0;z_flag=0;break
+                else:
+                    z_flag-=1
+        if z_flag < -total_zero:temp.append(0);z_flag=0;flag=0
+        column_count += 1;sliced_list.clear()
     return result
 
 ers = erosion(window1, sample_data);print(len(ers))
